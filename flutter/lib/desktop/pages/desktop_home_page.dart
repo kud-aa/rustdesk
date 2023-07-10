@@ -293,7 +293,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            translate("Your Desktop"),
+            translate("Our Desktop"),
             style: Theme.of(context).textTheme.titleLarge,
             // style: TextStyle(
             //     // color: MyTheme.color(context).text,
