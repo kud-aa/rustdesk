@@ -182,10 +182,10 @@ span.clear-input:hover {
 }
 
 div.connect-status {
-    left: 240px;
+    width: 87%;
     border-top: color(border) solid 1px;
-    width: 100%;
-    background: color(gray-bg);
+    border-right: color(border) solid 1px;
+    background: color(bg);
     padding: 1em;
 }
 
