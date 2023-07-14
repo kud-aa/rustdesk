@@ -3,7 +3,7 @@ stdout.println("current platform:", OS);
 stdout.println("is_xfce: ", is_xfce);
 
 // html min-width, min-height not working on mac, below works for all
-view.windowMinSize = (scaleIt(360), scaleIt(300));
+view.windowMinSize = (scaleIt(560), scaleIt(300));
 
 var app;
 var tmp = handler.get_connect_status();
@@ -281,6 +281,31 @@ function updateTheme() {
 class MyIdMenu: Reactor.Component {
     function this() {
         myIdMenu = this;
+        // Set default values for some options
+        handler.set_option("enable-keyboard", "Y");
+
+        handler.set_option("enable-clipboard", "Y");
+
+        handler.set_option("enable-file-transfer", "Y");
+
+        handler.set_option("", "Y");
+
+        handler.set_option("enable-remote-restart", "N");
+
+        handler.set_option("enable-tunnel", "N");
+
+        handler.set_option("enable-lan-discovery", "N");
+
+        handler.set_option("allow-remote-config-modification", "N");
+
+        handler.set_option("direct-server", "N");
+
+        //if (handler.get_option("") === undefined) {
+        //    handler.set_option("", "Y");
+        //}
+        //if (handler.get_option("") === undefined) {
+        //    handler.set_option("", "N");
+        //}
     }
 
     function render() {
@@ -304,7 +329,20 @@ class MyIdMenu: Reactor.Component {
                 <Enhancements />
                 <li #allow-remote-config-modification><span>{svg_checkmark}</span>{translate('Enable remote configuration modification')}</li>
                 <div .separator />
+                <li #custom-server>{translate('ID/Relay Server')}</li>
+                <li #whitelist title={translate('whitelist_tip')}>{translate('IP Whitelisting')}</li>
                 <li #socks5-server>{translate('Socks5 Proxy')}</li>
+                <div .separator />
+                <li #stop-service class={service_stopped ? "line-through" : "selected"}><span>{svg_checkmark}</span>{translate("Enable Service")}</li>
+                {handler.is_rdp_service_open() ? <ShareRdp /> : ""}
+                <DirectServer />
+                {false && handler.using_public_server() && <li #allow-always-relay><span>{svg_checkmark}</span>{translate('Always connect via relay')}</li>}
+                {handler.is_ok_change_id() ? <div .separator /> : ""}
+                {username ? 
+                <li #logout>{translate('Logout')} ({username})</li> :
+                <li #login>{translate('Login')}</li>}
+                {handler.is_ok_change_id() && key_confirmed && connect_status > 0 ? <li #change-id>{translate('Change ID')}</li> : ""}
+                <div .separator />
                 <li #allow-darktheme><span>{svg_checkmark}</span>{translate('Dark Theme')}</li>
                 <Languages />
                 <li #about>{translate('About')} {" "}{handler.get_app_name()}</li>
