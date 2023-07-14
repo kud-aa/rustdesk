@@ -28,7 +28,7 @@ body {
 }
 
 .left-pane {
-    width: 200px;
+    width: *;
     height: *;
     background: color(bg);
     border-right: color(border) 1px solid;
@@ -182,11 +182,12 @@ span.clear-input:hover {
 }
 
 div.connect-status {
-    width: 87%;
+    width: *;
     border-top: color(border) solid 1px;
-    border-right: color(border) solid 1px;
     background: color(bg);
     padding: 1em;
+    position: absolute;
+    bottom: 0;
 }
 
 div.connect-status > span.connect-status-icon {

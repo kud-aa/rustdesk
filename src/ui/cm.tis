@@ -437,7 +437,7 @@ view << event statechange {
 function self.ready() {
     adjustBorder();
     var (sw, sh) = view.screenBox(#workarea, #dimension);
-    var w = scaleIt(300);
+    var w = scaleIt(200);
     var h = scaleIt(400);
     view.move(sw - w, 0, w, h);
 }

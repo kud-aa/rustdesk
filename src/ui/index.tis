@@ -3,7 +3,7 @@ stdout.println("current platform:", OS);
 stdout.println("is_xfce: ", is_xfce);
 
 // html min-width, min-height not working on mac, below works for all
-view.windowMinSize = (scaleIt(560), scaleIt(300));
+view.windowMinSize = (scaleIt(360), scaleIt(300));
 
 var app;
 var tmp = handler.get_connect_status();
@@ -304,20 +304,7 @@ class MyIdMenu: Reactor.Component {
                 <Enhancements />
                 <li #allow-remote-config-modification><span>{svg_checkmark}</span>{translate('Enable remote configuration modification')}</li>
                 <div .separator />
-                <li #custom-server>{translate('ID/Relay Server')}</li>
-                <li #whitelist title={translate('whitelist_tip')}>{translate('IP Whitelisting')}</li>
                 <li #socks5-server>{translate('Socks5 Proxy')}</li>
-                <div .separator />
-                <li #stop-service class={service_stopped ? "line-through" : "selected"}><span>{svg_checkmark}</span>{translate("Enable Service")}</li>
-                {handler.is_rdp_service_open() ? <ShareRdp /> : ""}
-                <DirectServer />
-                {false && handler.using_public_server() && <li #allow-always-relay><span>{svg_checkmark}</span>{translate('Always connect via relay')}</li>}
-                {handler.is_ok_change_id() ? <div .separator /> : ""}
-                {username ? 
-                <li #logout>{translate('Logout')} ({username})</li> :
-                <li #login>{translate('Login')}</li>}
-                {handler.is_ok_change_id() && key_confirmed && connect_status > 0 ? <li #change-id>{translate('Change ID')}</li> : ""}
-                <div .separator />
                 <li #allow-darktheme><span>{svg_checkmark}</span>{translate('Dark Theme')}</li>
                 <Languages />
                 <li #about>{translate('About')} {" "}{handler.get_app_name()}</li>
@@ -544,18 +531,21 @@ class App: Reactor.Component
     function render() {
         var is_can_screen_recording = handler.is_can_screen_recording(false);
         return
-                    <div .left-pane>
-                    <div>
-                        <div .title>{translate('Your Desktop')}</div>
-                        <div .lighter-text>{translate('desk_tip')}</div>
-                        <div .your-desktop>
-                            <MyIdMenu />
-                            {key_confirmed ? <input type="text" readonly value={formatId(get_id())}/> : translate("Generating ...")}
-                        </div>
-                        <PasswordArea />
+        <div .app>
+            <div .left-pane>
+                <div>
+                    <div .title>{translate('Your Desktop')}</div>
+                    <div .lighter-text>{translate('desk_tip')}</div>
+                    <div .your-desktop>
+                        <MyIdMenu />
+                        {key_confirmed ? <input type="text" readonly value={formatId(get_id())}/> : translate("Generating ...")}
                     </div>
-                    <ConnectStatus @{this.connect_status} />
-            </div>;
+                    <PasswordArea />
+                </div>
+                <ConnectStatus @{this.connect_status} />
+                <div #overlay style="position: absolute;size:*;background:black;opacity:0.5;display:none"></div>
+            </div>
+        </div>;
     }
 
     event click $(button#connect) {

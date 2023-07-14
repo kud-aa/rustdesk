@@ -426,7 +426,7 @@ handler.setCursorPosition = function(x, y) {
 
 function self.ready() {
     var w = scaleIt(960);
-    var h = scaleIt(640);
+    var h = scaleIt(320);
     if (is_file_transfer || is_port_forward) {
         var r = handler.get_size();
         if (isReasonableSize(r) && r[2] > 0) {
