@@ -281,31 +281,6 @@ function updateTheme() {
 class MyIdMenu: Reactor.Component {
     function this() {
         myIdMenu = this;
-        // Set default values for some options
-        handler.set_option("enable-keyboard", "Y");
-
-        handler.set_option("enable-clipboard", "Y");
-
-        handler.set_option("enable-file-transfer", "Y");
-
-        handler.set_option("", "Y");
-
-        handler.set_option("enable-remote-restart", "N");
-
-        handler.set_option("enable-tunnel", "N");
-
-        handler.set_option("enable-lan-discovery", "N");
-
-        handler.set_option("allow-remote-config-modification", "N");
-
-        handler.set_option("direct-server", "N");
-
-        //if (handler.get_option("") === undefined) {
-        //    handler.set_option("", "Y");
-        //}
-        //if (handler.get_option("") === undefined) {
-        //    handler.set_option("", "N");
-        //}
     }
 
     function render() {

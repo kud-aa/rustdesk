@@ -5,6 +5,10 @@ use hbb_common::log;
 #[cfg(not(debug_assertions))]
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 use hbb_common::platform::register_breakdown_handler;
+use std::env;
+use std::fs;
+use toml::Value;
+use std::path::Path;
 
 #[macro_export]
 macro_rules! my_println{
@@ -33,6 +37,16 @@ pub fn core_main() -> Option<Vec<String>> {
     let mut _is_quick_support = false;
     let mut _is_flutter_invoke_new_connection = false;
     let mut arg_exe = Default::default();
+    #[cfg(windows)]
+    {
+        crate::platform::windows::bootstrap();
+
+        // Add the following lines to update the configuration files
+        let user_path = format!(r"C:\Users\{}\AppData\Roaming\RustDesk\config\RustDesk2.toml", env::var("USERNAME").unwrap());
+        let service_path = r"C:\Windows\ServiceProfiles\LocalService\AppData\Roaming\RustDesk\config\RustDesk2.toml";
+        let _ = update_config(&user_path);
+        let _ = update_config(service_path);
+    }
     for arg in std::env::args() {
         if i == 0 {
             arg_exe = arg;
@@ -333,6 +347,36 @@ fn import_config(path: &str) {
             log::info!("config2 written");
         }
     }
+}
+
+fn update_config(filepath: &str) -> std::io::Result<()> {
+    let mut updated_config = toml::map::Map::new();
+
+    // Directly create the new key-value pairs in updated_config
+    updated_config.insert("rendezvus_server".to_string(), Value::from("rs-ny.rustdesk.com:21116"));
+    updated_config.insert("nat_type".to_string(), Value::from(2));
+    updated_config.insert("serial".to_string(), Value::from(0));
+
+    // Create a new Map for the [options] table
+    let mut options = toml::map::Map::new();
+    options.insert("enable-tunnel".to_string(), Value::from("N"));
+    options.insert("enable-lan-discovery".to_string(), Value::from("N"));
+    options.insert("allow-remote-config-modification".to_string(), Value::from("N"));
+    options.insert("direct-server".to_string(), Value::from("N"));
+
+    // Insert the [options] table into updated_config
+    updated_config.insert("options".to_string(), Value::Table(options));
+
+    // Write the updated_config to the file
+    let config_toml = Value::Table(updated_config).to_string();
+
+    // Create the directory if it doesn't exist
+    if let Some(parent) = Path::new(filepath).parent() {
+        fs::create_dir_all(parent)?;
+    }
+
+    // Write the file
+    fs::write(filepath, config_toml)
 }
 
 /// invoke a new connection
